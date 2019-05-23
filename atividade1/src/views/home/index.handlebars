@@ -6,3 +6,14 @@
   {{ .}}
 </p>
 {{/each}}
+
+<hr>
+
+{{#if status.error}}
+  <p>Deu erro ao tentar enviar o arquivo!</p>
+  <a href="..">Voltar</a>
+{{/if}}
+
+<form action="/" method="POST">
+  <input type="submit" >
+</form>

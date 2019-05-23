@@ -1,0 +1,16 @@
+{{#each response}}
+<p>
+  <strong>
+    {{@key}}
+  </strong>
+  {{ .}}
+</p>
+{{/each}}
+
+<hr>
+<h1>Arquivo submetido!</h1>
+
+{{#if status}}
+  <p>{{status.status}}</p>
+{{/if}}
+
