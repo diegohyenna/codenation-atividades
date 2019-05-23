@@ -1,15 +1,20 @@
-//helpers
-const hFile = require('../helpers/hFile')
-const mFile = require('../models/File')
+const url = require('url')
 
+//Helpers
+const hFile = require('../helpers/hFile')
+const hCrypt = require('../helpers/hEncryption')
+
+//Model
+const mFile = require('../models/mFile')
+
+//Function's Controller
 exports.get = ((req, res) => {
 
-  let userToken = "15ceecf5a98d8f829b6eea3978f9cad4bc8e3a3d"
-  let apiUrl = "https://api.codenation.dev/v1/challenge/dev-ps/generate-data?token="+userToken
-  
-
-  mFile.get(apiUrl)
+  mFile.get()
     .then( async file => {
+
+      file.decifrado = hCrypt.decryptCesar(file.cifrado)
+      file.resumo_criptografico = hCrypt.encryptSha1(file.decifrado)
 
       let responseFile = await JSON.stringify(file)
       
@@ -32,15 +37,41 @@ exports.get = ((req, res) => {
 })
 
 exports.post = (req, res) => {
-  res.status(201).send('Requisição recebida com sucesso!');
+
+  hFile.openFile('./src/archives/answer.json')
+    .then( file => {
+      let openedFile = JSON.parse(file)
+      
+      mFile.submit(openedFile)
+        .then( response => {
+          console.log(response)
+
+          res.redirect( 
+
+            url.format({
+              pathname: '/submitted',
+              query: openedFile,
+    
+            })
+            // res.redirect('/submitted', 200)
+          )
+        })
+        .catch( error => {
+          res.render('home/index', {status: {error: true}});
+        })
+    })
+    .catch(error => {
+      res.render('home/index', {status: {error: true}});
+    })
+
 }
 
-exports.put = (req, res) => {
-  let id = req.params.id;
-  res.status(201).send(`Requisição recebida com sucesso! ${id}`);
+exports.submitted = (req, res) => {
+  // console.log(req.query)
+  res.render('home/submitted')
 }
 
-exports.delete = (req, res) => {
-  let id = req.params.id;
-  res.status(200).send(`Requisição recebida com sucesso! ${id}`);
-}
+// exports.delete = (req, res) => {
+//   let id = req.params.id;
+//   res.status(200).send(`Requisição recebida com sucesso! ${id}`);
+// }

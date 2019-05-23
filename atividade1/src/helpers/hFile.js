@@ -15,7 +15,7 @@ hFile = {
   createAndWriteInFile: function(path, file, ){
     return new Promise( (resolve, reject) => {
       try{
-        fs.writeFile(path, file, {enconding:'utf-8', flag: 'a'}, (error) => {
+        fs.writeFile(path, file, {enconding:'utf-8', flag: 'w'}, (error) => {
           if (error) reject(error)
           resolve(true)
         });
@@ -32,14 +32,24 @@ hFile = {
           if (error) reject(error)
           resolve(true)
         });
-      }catch(e){
-        reject(e)
+      }catch(error){
+        reject(error)
       }
     })
   },
 
   openFile: function(path){
-    fs.openSync(path)
+    
+    return new Promise( (resolve, reject) => {
+      try{
+        fs.readFile(path, 'utf-8', (error, data) => {
+          if (error) reject(error)
+          resolve(data)
+        });
+      }catch(error){
+        reject(error)
+      }
+    })
   }
 
 }

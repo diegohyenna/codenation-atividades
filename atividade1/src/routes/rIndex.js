@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const controller = require('../controllers/cIndex')
+const indexController = require('../controllers/cIndex')
 
 
-router.get('/', controller.get);
-router.post('/', controller.post);
-router.put('/:id', controller.put);
-router.delete('/:id', controller.delete);
+router.get('/', indexController.get);
+router.post('/', indexController.post);
+router.get('/submitted', indexController.submitted);
+// router.delete('/:id', controller.delete);
 
 
 module.exports = router;

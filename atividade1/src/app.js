@@ -13,7 +13,6 @@ app.engine('handlebars', handlebars({defaultLayout: 'index'}))
 app.set('views', __dirname + '\\views');
 app.set('view engine', 'handlebars');
 
-
 // Rotas
 app.use('/', rIndex);
 
